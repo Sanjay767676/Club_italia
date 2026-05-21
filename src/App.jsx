@@ -1,16 +1,12 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { motion, AnimatePresence, useScroll, useTransform, useInView } from 'framer-motion';
-import { ChevronRight, ArrowRight, Menu, X, Plus } from 'lucide-react';
-import gsap from 'gsap';
-import { ScrollTrigger } from 'gsap/ScrollTrigger';
-
-gsap.registerPlugin(ScrollTrigger);
+import { motion, AnimatePresence, useInView } from 'framer-motion';
+import { ArrowRight, Menu, X, Plus } from 'lucide-react';
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
 
   return (
-    <nav className="fixed top-0 left-0 w-full z-50 px-6 py-8 md:px-12 flex justify-between items-center mix-blend-difference text-white">
+    <nav className="fixed top-0 left-0 w-full z-50 px-4 py-5 md:px-12 md:py-8 flex justify-between items-center mix-blend-difference text-white">
       <div className="text-2xl font-black tracking-tighter uppercase">
         CLUB ITALIA
       </div>
@@ -34,7 +30,7 @@ const Navbar = () => {
             animate={{ x: 0 }}
             exit={{ x: '100%' }}
             transition={{ type: 'spring', damping: 25, stiffness: 200 }}
-            className="fixed inset-0 bg-[#0a0a0a] flex flex-col items-center justify-center space-y-8 text-4xl font-black uppercase tracking-tighter z-40"
+            className="fixed inset-0 bg-[#0a0a0a] flex flex-col items-center justify-center space-y-8 text-3xl sm:text-4xl font-black uppercase tracking-tighter z-40"
           >
             {['Categories', 'Portfolio', 'Experience', 'Contact'].map((item) => (
               <a key={item} href={`#${item.toLowerCase()}`} onClick={() => setIsOpen(false)} className="hover:italic transition-all">
@@ -50,20 +46,20 @@ const Navbar = () => {
 
 const Hero = () => {
   return (
-    <section className="relative min-h-screen flex flex-col justify-center px-6 md:px-12 pt-20 overflow-hidden bg-[#0a0a0a]">
+    <section className="relative min-h-screen flex flex-col justify-center px-4 sm:px-6 md:px-12 pt-20 overflow-hidden bg-[#0a0a0a]">
       <motion.div
         initial={{ opacity: 0, scale: 0.95 }}
         animate={{ opacity: 1, scale: 1 }}
         transition={{ duration: 1.5, ease: [0.16, 1, 0.3, 1] }}
         className="max-w-7xl z-10"
       >
-        <h1 className="text-6xl md:text-[11vw] font-black leading-[0.8] tracking-tighter uppercase mb-20 kinetic-text">
+        <h1 className="text-[clamp(3rem,11vw,7.5rem)] font-black leading-[0.82] tracking-tighter uppercase mb-12 md:mb-20 kinetic-text max-w-6xl">
           LE RESPECT <br />
           <span className="italic font-serif text-white/20 hover:text-white transition-colors duration-700">EST LE VRAI</span> <br />
           LUXE
         </h1>
 
-        <div className="grid md:grid-cols-2 gap-12 border-t border-white/10 pt-12 items-center">
+        <div className="grid md:grid-cols-2 gap-8 md:gap-12 border-t border-white/10 pt-10 md:pt-12 items-center">
           <div className="space-y-8">
             <div className="text-[10px] uppercase tracking-[0.4em] font-bold text-white/40">The CLUB ITALIA CARD</div>
             <div className="max-w-xl text-lg md:text-xl text-white/70 leading-relaxed font-light space-y-4">
@@ -91,6 +87,9 @@ const Hero = () => {
               src="/club_italia_card.png"
               alt="Club Italia Elite Card"
               className="w-full rounded-2xl shadow-[0_20px_50px_rgba(255,255,255,0.05)] border border-white/10"
+              loading="eager"
+              fetchPriority="high"
+              decoding="async"
               whileHover={{ scale: 1.05, rotateY: -10 }}
               transition={{ type: "spring", stiffness: 300, damping: 20 }}
             />
@@ -145,7 +144,7 @@ const MasterCategories = () => {
   }, []);
 
   return (
-    <section id="categories" className="relative min-h-[90vh] bg-[#f9f8f4] text-[#0a0a0a] py-32 px-6 md:px-12 flex flex-col justify-between overflow-hidden">
+    <section id="categories" className="relative min-h-[90vh] bg-[#f9f8f4] text-[#0a0a0a] py-24 md:py-32 px-4 sm:px-6 md:px-12 flex flex-col justify-between overflow-hidden">
       {/* Header Info */}
       <div className="flex justify-between items-start w-full relative z-10">
         <div className="flex flex-col">
@@ -153,7 +152,7 @@ const MasterCategories = () => {
           <span className="text-[10px] uppercase tracking-[0.3em] font-black">MASTER CATEGORIES</span>
         </div>
 
-        <div className="flex space-x-6 text-2xl font-bold opacity-30">
+        <div className="flex flex-wrap gap-3 sm:gap-6 text-xl sm:text-2xl font-bold opacity-30">
           {categories.map((cat, i) => (
             <span key={cat.id} className={`transition-all duration-500 cursor-pointer ${i === activeIndex ? 'opacity-100 scale-125 font-black' : 'hover:opacity-50'}`}>
               {cat.id}.
@@ -173,7 +172,7 @@ const MasterCategories = () => {
             transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
             className="w-full"
           >
-            <h2 className="text-7xl md:text-[12vw] font-black leading-none tracking-tighter uppercase whitespace-nowrap">
+            <h2 className="text-[clamp(3rem,12vw,10rem)] font-black leading-none tracking-tighter uppercase whitespace-normal md:whitespace-nowrap max-w-5xl">
               {categories[activeIndex].title}
             </h2>
           </motion.div>
@@ -221,6 +220,8 @@ const ProjectItem = ({ title, category, location, image, index }) => {
         src={image}
         alt={title}
         className="w-full h-full object-cover grayscale brightness-50 group-hover:grayscale-0 group-hover:brightness-100 group-hover:scale-105 transition-all duration-[1.5s] ease-out"
+        loading="lazy"
+        decoding="async"
       />
       <div className="absolute inset-0 p-8 flex flex-col justify-end bg-gradient-to-t from-black via-black/20 to-transparent opacity-100 group-hover:from-black/80 transition-all">
         <div className="flex justify-between items-end">
@@ -274,11 +275,11 @@ const Portfolio = () => {
   ];
 
   return (
-    <section id="portfolio" className="py-32 px-6 md:px-12 bg-[#0a0a0a]">
+    <section id="portfolio" className="py-24 md:py-32 px-4 sm:px-6 md:px-12 bg-[#0a0a0a]">
       <div className="flex flex-col md:flex-row justify-between items-end mb-20 gap-8">
         <div>
           <div className="text-[10px] uppercase tracking-[0.4em] font-black text-white/40 mb-4">LATEST PROJECTS</div>
-          <h2 className="text-5xl md:text-7xl font-black uppercase tracking-tighter leading-none">
+          <h2 className="text-4xl sm:text-5xl md:text-7xl font-black uppercase tracking-tighter leading-none max-w-4xl">
             Crafting exclusive sales - <br />Our exclusive collaborations
           </h2>
         </div>
@@ -401,17 +402,17 @@ Pincode: ${formData.pincode}
 
 const Experience = () => {
   return (
-    <section id="experience" className="py-32 px-6 md:px-12 border-t border-white/10 bg-[#0a0a0a]">
+    <section id="experience" className="py-24 md:py-32 px-4 sm:px-6 md:px-12 border-t border-white/10 bg-[#0a0a0a]">
       <div className="grid md:grid-cols-2 gap-20">
         <div>
           <div className="text-[10px] uppercase tracking-[0.4em] font-black text-white/40 mb-8">THE BRAND</div>
-          <h2 className="text-5xl md:text-[7vw] font-black leading-[0.85] tracking-tighter uppercase">
+          <h2 className="text-[clamp(2.75rem,7vw,6rem)] font-black leading-[0.88] tracking-tighter uppercase max-w-4xl">
             A 360° APPROACH <br />
             <span className="italic font-serif text-white/60">TO YOUR VISION.</span>
           </h2>
         </div>
         <div className="flex flex-col justify-end space-y-12">
-          <p className="text-2xl text-white/70 leading-relaxed font-light italic">
+          <p className="text-xl md:text-2xl text-white/70 leading-relaxed font-light italic max-w-2xl">
             "We don't just provide a card; we provide a gateway. A passport to a league of your own, where every interaction is curated for the elite."
           </p>
           <div className="grid grid-cols-2 gap-8 text-[10px] uppercase tracking-[0.4em] font-black">
@@ -434,9 +435,9 @@ const Contact = () => {
   const [modalOpen, setModalOpen] = useState(false);
 
   return (
-    <section id="contact" className="py-40 px-6 md:px-12 flex flex-col items-center text-center bg-[#0a0a0a]">
+    <section id="contact" className="py-28 md:py-40 px-4 sm:px-6 md:px-12 flex flex-col items-center text-center bg-[#0a0a0a]">
       <div className="text-[10px] uppercase tracking-[0.3em] font-black text-white/40 mb-12">CONNECT WITH THE ELITE</div>
-      <h2 className="text-6xl md:text-[15vw] font-black mb-12 uppercase tracking-tighter leading-[0.8]">
+      <h2 className="text-[clamp(3rem,15vw,9rem)] font-black mb-10 md:mb-12 uppercase tracking-tighter leading-[0.82] max-w-5xl">
         OWN THE <br />THRONE
       </h2>
       <motion.button
@@ -457,8 +458,8 @@ const Contact = () => {
 };
 
 const Footer = () => (
-  <footer className="py-24 px-6 md:px-12 border-t border-white/10 bg-[#0a0a0a]">
-    <div className="flex flex-col md:flex-row justify-between items-start gap-12">
+  <footer className="py-20 md:py-24 px-4 sm:px-6 md:px-12 border-t border-white/10 bg-[#0a0a0a]">
+  <div className="flex flex-col md:flex-row justify-between items-start gap-10 md:gap-12">
       <div className="space-y-6">
         <div className="text-[10px] tracking-[0.3em] uppercase font-black">© 2025 CLUB ITALIA — ELITE NETWORK</div>
         <div className="text-white/40 text-[10px] tracking-[0.3em] uppercase font-black">
@@ -477,7 +478,7 @@ const Footer = () => (
 
       <div className="flex flex-col space-y-4">
         <div className="text-[10px] tracking-[0.3em] uppercase font-black text-white/30 mb-2">SOCIAL</div>
-        <div className="flex space-x-12 text-[10px] tracking-[0.3em] uppercase font-black opacity-50">
+        <div className="flex flex-wrap gap-6 md:gap-12 text-[10px] tracking-[0.3em] uppercase font-black opacity-50">
           <a href="https://www.instagram.com/the.club.italia?igsh=MWFibzA4MG5ucWpqdw==" target="_blank" rel="noopener noreferrer" className="hover:text-white transition-colors">Instagram</a>
           <a href="https://www.linkedin.com/in/club-italia-507934386?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=android_app" target="_blank" rel="noopener noreferrer" className="hover:text-white transition-colors">LinkedIn</a>
         </div>
